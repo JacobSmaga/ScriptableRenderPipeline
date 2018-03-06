@@ -111,22 +111,13 @@ Shader "LightweightPipeline/Standard (Simple Lighting)"
             // Required to compile gles 2.0 with standard srp library
             #pragma prefer_hlslcc gles
             #pragma target 2.0
-            
-            // -------------------------------------
-            // Material Keywords
-            #pragma shader_feature _ALPHATEST_ON 
-            #pragma shader_feature _ALPHAPREMULTIPLY_ON
-            #pragma shader_feature _ _SPECGLOSSMAP _SPECULAR_COLOR
-            #pragma shader_feature _ _GLOSSINESS_FROM_BASE_ALPHA
-            #pragma shader_feature _NORMALMAP
-            #pragma shader_feature _EMISSION
 
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
 
             #pragma vertex ShadowPassVertex
-            #pragma fragment LitPassFragmentSimpleNull
+            #pragma fragment ShadowPassFragment
 
             #include "LWRP/ShaderLibrary/LightweightPassShadow.hlsl"
             ENDHLSL
@@ -143,24 +134,20 @@ Shader "LightweightPipeline/Standard (Simple Lighting)"
             // Required to compile gles 2.0 with standard srp library
             #pragma prefer_hlslcc gles
             #pragma target 2.0
+            #pragma vertex vert
+            #pragma fragment frag
 
-            // -------------------------------------
-            // Material Keywords
-            #pragma shader_feature _ALPHATEST_ON 
-            #pragma shader_feature _ALPHAPREMULTIPLY_ON
-            #pragma shader_feature _ _SPECGLOSSMAP _SPECULAR_COLOR
-            #pragma shader_feature _ _GLOSSINESS_FROM_BASE_ALPHA
-            #pragma shader_feature _NORMALMAP
-            #pragma shader_feature _EMISSION
+            #include "LWRP/ShaderLibrary/Core.hlsl"
 
-            //--------------------------------------
-            // GPU Instancing
-            #pragma multi_compile_instancing
+            float4 vert(float4 pos : POSITION) : SV_POSITION
+            {
+                return TransformObjectToHClip(pos.xyz);
+            }
 
-            #pragma vertex LitPassVertex
-            #pragma fragment LitPassFragmentSimpleNull
-        
-            #include "LWRP/ShaderLibrary/LightweightPassLit.hlsl"
+            half4 frag() : SV_TARGET
+            {
+                return 0;
+            }
             ENDHLSL
         }
 
